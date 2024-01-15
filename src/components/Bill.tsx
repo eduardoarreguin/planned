@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, StyleProp, TextStyle } from 'react-native'
 import React from 'react'
 import { CategoriesI, FormDataI } from '../interfaces/interfaces'
 import globalStyles from '../styles/globalStyles'
@@ -40,11 +40,11 @@ const Bill: React.FC<FormDataI>  = ({id, name, amount, category, date, setModal,
                         <View style={styles.containerText}>
                             <Text style={styles.category}>{category}</Text>
                             <Text style={styles.name}>{name}</Text>
-                            <Text style={styles.date}>{formatDate(date)}</Text>
+                            <Text style={globalStyles.textDate as StyleProp<TextStyle>}>{formatDate(date)}</Text>
                         </View>
                     </View>
 
-                    <Text style={styles.amount}>{formatQuantity(amount)}</Text>
+                    <Text style={globalStyles.textAmount as StyleProp<TextStyle>}>{formatQuantity(amount)}</Text>
                 </View>
 
             </View>

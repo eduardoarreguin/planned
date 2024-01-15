@@ -1,3 +1,5 @@
+import { danger, primaryColor } from "./colors";
+
 const globalStyles = {
     container:{
         backgroundColor: '#FFF',
@@ -14,7 +16,21 @@ const globalStyles = {
         shadowOpacity: 0.23,
         shadowRadius: 2.62,
         elevation: 4
-      },
+    },
+    title:{
+        color: primaryColor,
+        fontSize: 30,
+        textAlign: 'center',
+
+    },
+    textAmount:{
+        fontSize: 20,
+        fontWeight: '700'
+    },
+    textDate:{
+        fontWeight: '700',
+        color: danger
+    },
 }
 
 export default globalStyles;

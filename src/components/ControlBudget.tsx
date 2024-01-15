@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import globalStyles from '../styles/globalStyles'
-import { ControlBudgetI } from '../interfaces/interfaces'
-import { formatQuantity } from '../helpers'
-import { textColor } from '../styles/colors'
+import Line from '../components/Line';
+import globalStyles from '../styles/globalStyles';
+import { ControlBudgetI } from '../interfaces/interfaces';
+import { formatQuantity } from '../helpers';
+import { danger, textColor } from '../styles/colors';
 
- import CircularProgress from 'react-native-circular-progress-indicator'
+import CircularProgress from 'react-native-circular-progress-indicator';
 
 const controlBudget:React.FC<ControlBudgetI> = ({
     budget, 
@@ -16,29 +17,12 @@ const controlBudget:React.FC<ControlBudgetI> = ({
     setAddBudget
 }) => {
 
-    // //const [available, setAvailable]   = useState<number>(0)
-    // const [spend, setSpend]           = useState<number>(0)
-    // const [percentaje, setPercentaje] = useState<number>(0)
-
-    // useEffect(() => {
-    //     const totalSpend = bills.reduce( (total, spend ) => Number(spend.amount) + total, 0)
-    //     const newPercentaje = (
-    //         (totalSpend / budget!) * 100
-    //     )
-
-    //     setPercentaje(newPercentaje)
-    //     setSpend(totalSpend)
-    //     setAvailable(budget! - totalSpend)
-        
-    // }, [bills])
-    
-
     return (
         <View style={styles.container} >
             <View style={styles.centerGrapic}>
                
                 <CircularProgress
-                    value={percentaje}
+                    value={!isNaN(percentaje)? percentaje : 0 }
                     duration={2000}
                     radius={150}
                     valueSuffix={'%'}
@@ -47,7 +31,7 @@ const controlBudget:React.FC<ControlBudgetI> = ({
                     inActiveStrokeWidth={20}
                     activeStrokeColor='#3B82F6'
                     activeStrokeWidth={20}
-                    titleStyle={{ fontWeight: 'bold', fontSize: 24 }}
+                    titleStyle={{ fontWeight: 'bold', fontSize: 29+1 }}
                     titleColor='#64748B'
                     
                 />
@@ -55,23 +39,17 @@ const controlBudget:React.FC<ControlBudgetI> = ({
 
             <View style={styles.containerText}>
 
-                <View style={{justifyContent: 'space-between', alignItems:'center', flexDirection: 'row'}} >
-                    
-
-                    <Text style={styles.value}>
-                        <Text style={styles.label} >Budget {' '}</Text>
-                        {formatQuantity(budget)}
-                    </Text>
-
-                    <Pressable 
-                        onPress={() => setAddBudget(true)} 
-                        style={styles.btnPlus}
-                    >
-                        <Text style ={styles.btnPlusText}>Add</Text>
-                    </Pressable>
-                </View>
-
-                <View style={styles.line}></View>
+                <Pressable 
+                    onPress={() => setAddBudget(true)} 
+                    style={styles.btnPlus}
+                >
+                    <Text style ={styles.btnPlusText}>Add Budget</Text>
+                </Pressable>
+                
+                <Text style={styles.value}>
+                    <Text style={styles.label} >Budget {' '}</Text>
+                    {formatQuantity(budget)}
+                </Text>
 
                 <Text style={styles.value}>
                     <Text style={styles.label} >Available {' '}</Text>
@@ -96,37 +74,31 @@ const styles = StyleSheet.create({
     centerGrapic:{
         alignItems:'center'
     },
-    containerText:{
-        marginTop:50
-    },
-    value:{
-        fontSize: 24,
-        textAlign: 'justify',
-        marginLeft: 10
-    },
-    label:{
-        fontWeight: '700',
-        color: textColor
-    },
-    line:{
-        backgroundColor: '#64748B',
-        height: 2,
-        width: '95%',
-        alignSelf: 'center',
-        margin: 10
-    },
     btnPlus:{
-        backgroundColor: '#31aef6',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 10,
-        marginRight: 10
+        backgroundColor: danger,
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 20,
+        alignItems:'center'
 
     },
     btnPlusText:{
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
-        textTransform: 'uppercase'
-    }
+        textTransform: 'uppercase',
+    },
+    containerText:{
+        marginTop:50
+    },
+    value:{
+        fontSize: 24,
+        textAlign: 'center',
+        marginLeft: 10
+    },
+    label:{
+        fontWeight: '700',
+        color: textColor
+    },
+    
 })

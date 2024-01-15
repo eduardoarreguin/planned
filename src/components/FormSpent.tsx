@@ -8,7 +8,7 @@ import {
     Pressable,
 } from 'react-native';
 
-import {formColor, formTextColor, secondaryColor} from '../styles/colors';
+import {danger, formColor, formTextColor, secondaryColor} from '../styles/colors';
 import globalStyles from '../styles/globalStyles';
 import {FormSpentI} from '../interfaces/interfaces';
 import MyPicker from './MyPicker';
@@ -52,7 +52,7 @@ const FormSpend: React.FC<FormSpentI> = ({
                         setModal(false);
                         setBill(undefined);
                     }}>
-                    <Text style={styles.btnText}>Cancelar</Text>
+                    <Text style={styles.btnText}>Cancel</Text>
                 </Pressable>
                 {
                     !!id&&(
@@ -62,7 +62,7 @@ const FormSpend: React.FC<FormSpentI> = ({
                                 deleteSpent(id)
                             }}
                         > 
-                            <Text style={styles.btnText}>Eliminar</Text>
+                            <Text style={styles.btnText}>Delete</Text>
                         </Pressable>
                     )
                 }
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     btnCancel: {
-        backgroundColor: '#DB2777',
+        backgroundColor: danger,
     },
     btnDelete:{
         backgroundColor: 'red',

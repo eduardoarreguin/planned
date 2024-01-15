@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert, Pressable, Image, Modal, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Alert, Pressable, Image, Modal, ScrollView } from 'react-native';
 
-import Header  from './src/components/Header';
-import NewBudget  from './src/components/NewBudget';
-import ControlBudget  from './src/components/ControlBudget';
-import FormSpent from './src/components/FormSpent';
+import Header        from './src/components/Header';
+import NewBudget     from './src/components/NewBudget';
+import ControlBudget from './src/components/ControlBudget';
+import FormSpent     from './src/components/FormSpent';
+import ListBills     from './src/components/ListBills';
+import Filter        from './src/components/Filter';  
 
 import { primaryColor, secondaryColor } from './src/styles/colors';
-import { BudgetI, FormDataI } from './src/interfaces/interfaces';
+import { BudgetI, FormDataI, ListBillsI } from './src/interfaces/interfaces';
 import { generateId } from './src/helpers';
-import ListBills from './src/components/ListBills';
-import Filter from './src/components/Filter'; 
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const App: React.FC = () => {   
-    const [ firstBudget, setfirstBudget ]    = useState<boolean>(true)
     const [ addBudget, setAddBudget ]         = useState<boolean>(true)
-    const [ budget, setBudget ]               = useState<number>(0)
-    //const [ budget, setBudget ]               = useState<BudgetI[]>([])
-
+    const [ budget, setBudget ]               = useState<BudgetI[]>([])
     const [ bills, setBills ]                 = useState<FormDataI[]>([])
     const [ modal, setModal ]                 = useState<boolean>(false)
     const [ bill, setBill ]                   = useState<FormDataI>()
@@ -30,32 +28,88 @@ const App: React.FC = () => {
     const [percentaje, setPercentaje] = useState<number>(0)
     const [amountItem, setAmountItem] = useState<number>(0)
 
-    
+
+    useEffect(() =>{
+        const getBudgetStorage = async() => {
+            try {
+                const budgetStorage = await AsyncStorage.getItem('budget');
+                console.log(budgetStorage)
+                setBudget( budgetStorage? JSON.parse(budgetStorage): ([] as BudgetI[]) )
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getBudgetStorage()
+    },[])
+
+    useEffect(() =>{
+        const getBillsStorage = async() => {
+            try {
+                const billsStorage = await AsyncStorage.getItem('bills');
+                setBills( billsStorage? JSON.parse(billsStorage): ([] as FormDataI[]) )
+                
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getBillsStorage()
+    },[])
+
+    useEffect(() =>{
+        if(budget.length >= 1){
+
+            const saveBudgetStorage = async() =>{
+                try {
+                    await AsyncStorage.setItem('budget', JSON.stringify(budget))
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            saveBudgetStorage()
+        }
+    }, [budget])
+
+    useEffect(()=>{
+        const saveBillsStorage = async() =>{
+            try {
+                await AsyncStorage.setItem('bills', JSON.stringify(bills))
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        saveBillsStorage()
+    },[bills])
 
     useEffect(() => {
-        const totalSpent = bills.reduce( (total, spend ) => Number(spend.amount) + total, 0)
-        const newPercentaje = (
-            (totalSpent / budget!) * 100
-        )
+        
+        const totalSpent  = bills.reduce( (total, spend )   => Number(spend.amount)  + total, 0)
+        const totalBudget = budget.reduce( (total, budget ) => Number(budget.amount) + total, 0)
+        const newPercentaje = ( (totalSpent / totalBudget!) * 100 )
+
+        if(budget.length>0){
+            setAddBudget(false)
+        }
 
         setPercentaje(newPercentaje)
         setSpent(totalSpent)
-        setAvailable(budget! - totalSpent)
+        setAvailable(totalBudget! - totalSpent)
         
     }, [bills, budget])
 
-    const handleNewBudget = ( myBudget: number ) => {
-        console.log(firstBudget)
-        if(!firstBudget){
-            setBudget( myBudget + budget)
-        }
-        if (Number(myBudget) <= 0 ){
+    const handleNewBudget = ( {amount, id, date}: BudgetI ) => {
+        
+        if (Number(amount) <= 0 ){
             Alert.alert('Error', 'The budget cannot be 0 or less', [
                 { text: 'OK', onPress: () => console.log('OK button pressed') }
             ])
             return
         }
-        setfirstBudget(false)
+
+        const myNewBudget = { id, date, amount}
+        myNewBudget.id = generateId()
+        myNewBudget.date = new Date()
+        setBudget([...budget, myNewBudget])
+
         setAddBudget(false)
     } 
 
@@ -69,11 +123,6 @@ const App: React.FC = () => {
             ])
             return
         }
-        // console.log(amountItem, 'amountItem')
-        // console.log(budget, 'budget')
-        // console.log(amount, 'amount')
-        // console.log(available, 'available')
-        //return
 
         if (amount! - (id?amountItem: 0)  > available ){  
             Alert.alert("You don't have enough money", `You only have ${available +  (id? amountItem: 0) } dollars available`, [
@@ -85,8 +134,8 @@ const App: React.FC = () => {
         const spentToUpdate = { name, amount, category, id, date }
        
         if(id){
-            const updatedExpenses = bills.map( spentState  => spentState.id === id? spentToUpdate : spentState )
-            setBills(updatedExpenses)
+            const updatedBills = bills.map( spentState  => spentState.id === id? spentToUpdate : spentState )
+            setBills(updatedBills)
         }else{
             spentToUpdate.id = generateId()
             spentToUpdate.date = new Date()
@@ -101,13 +150,29 @@ const App: React.FC = () => {
         Alert.alert('You want to eliminate this expense', 'Once deleted it cannot be recovered', [
             { text: 'No', style:'cancel' },
             { text: 'Yes Delete', onPress: () => {
-                const updatedExpenses = bills.filter(spentState => 
+                const updatedBills = bills.filter(spentState => 
                     spentState.id !== id)
-                setBills(updatedExpenses)
+                setBills(updatedBills)
                 setModal(false)
                 setBill(undefined)
             }}
 
+        ])
+    }
+
+    const resetApp = () =>{
+        Alert.alert("Do you want to reset the pp", `This will eliminate budget and bills`, [
+            { text: 'NO', style: 'cancel' },
+            { text: 'Yes reset', onPress: async() => {
+                try {
+                    await AsyncStorage.clear()
+                    setAddBudget(true)
+                    setBudget([])
+                    setBills([])
+                } catch (error) {
+                    console.log(error)
+                }
+            }}
         ])
     }
 
@@ -117,16 +182,16 @@ const App: React.FC = () => {
                 <View  style={styles.header}>
                     <Header />
                     { addBudget? 
+
                         <NewBudget 
                             handleNewBudget={handleNewBudget} 
                             budget={budget}
-                            setBudget={setBudget}
-                            firstBudget={firstBudget}
                             setAddBudget={setAddBudget}
+                            resetApp={resetApp}
                         />  
                         : 
                         <ControlBudget 
-                            budget={budget} 
+                            budget={budget.reduce((total, budget ) => Number(budget.amount) + total, 0)} 
                             available={available}
                             spent={spent}
                             percentaje={percentaje}

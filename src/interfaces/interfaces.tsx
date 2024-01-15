@@ -1,11 +1,9 @@
 
 export interface NewBudgetI{
-    handleNewBudget: (newBudget: number) => void;
-    budget:          number;
-    setBudget:       React.Dispatch<React.SetStateAction<number>>;
-    firstBudget:     boolean;
+    handleNewBudget: (budget:BudgetI) => void;
+    budget:          BudgetI[]
     setAddBudget:    React.Dispatch<React.SetStateAction<boolean>>;
-
+    resetApp:        () => void;
 }
 
 export interface ControlBudgetI{
@@ -46,8 +44,8 @@ export interface FormDataI{
 }
 
 export interface BudgetI{
-    id?:       string;
-    amount:    number | null;
+    id:       string;
+    amount:    number;
     date?:     Date;
 }
 
