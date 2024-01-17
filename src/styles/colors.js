@@ -1,9 +1,14 @@
-export const primaryColor = '#3B82F6';
-export const secondaryColor = '#F5F5F5';
-export const buttonColor = '#1048A4';
-export const textColor = '#3B82F6';
-export const formColor = '#1E40AF';
-export const formTextColor = '#64748B';
-export const danger = '#DB2777';
+export default  Colors ={
+    primaryColor: '#3B82F6',
+    secondaryColor: '#F5F5F5',
+    formColor: '#1E40AF',
+    textColor: '#64748B',
+    textLightColor: '#94A3B8',
+    pinkLight: '#DB2777',
+    redDark: '#D32F2F'
+}
+
+
+
 
 

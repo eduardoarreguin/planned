@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native';
 
 import Line from '../components/Line';
 import globalStyles from '../styles/globalStyles';
 import { ControlBudgetI } from '../interfaces/interfaces';
 import { formatQuantity } from '../helpers';
-import { danger, textColor } from '../styles/colors';
+import Colors from '../styles/colors';
 
 import CircularProgress from 'react-native-circular-progress-indicator';
+import colors from '../styles/colors';
 
 const controlBudget:React.FC<ControlBudgetI> = ({
     budget, 
@@ -27,12 +28,12 @@ const controlBudget:React.FC<ControlBudgetI> = ({
                     radius={150}
                     valueSuffix={'%'}
                     title='spent'
-                    inActiveStrokeColor='#F5F5F5'
+                    inActiveStrokeColor={Colors.secondaryColor}
                     inActiveStrokeWidth={20}
-                    activeStrokeColor='#3B82F6'
+                    activeStrokeColor={Colors.primaryColor}
                     activeStrokeWidth={20}
                     titleStyle={{ fontWeight: 'bold', fontSize: 29+1 }}
-                    titleColor='#64748B'
+                    titleColor={Colors.textColor}
                     
                 />
             </View>
@@ -41,23 +42,29 @@ const controlBudget:React.FC<ControlBudgetI> = ({
 
                 <Pressable 
                     onPress={() => setAddBudget(true)} 
-                    style={styles.btnPlus}
+                    style={[
+                        globalStyles.btn as StyleProp<TextStyle>,
+                        { 
+                            backgroundColor: Colors.pinkLight, 
+                            marginBottom: 30 
+                        }
+                    ]}
                 >
                     <Text style ={styles.btnPlusText}>Add Budget</Text>
                 </Pressable>
                 
-                <Text style={styles.value}>
-                    <Text style={styles.label} >Budget {' '}</Text>
+                <Text style={styles.text}>
+                    <Text style={[styles.text, {color:Colors.primaryColor}]} >Budget {' '}</Text>
                     {formatQuantity(budget)}
                 </Text>
 
-                <Text style={styles.value}>
-                    <Text style={styles.label} >Available {' '}</Text>
+                <Text style={styles.text}>
+                    <Text style={[styles.text, {color:Colors.primaryColor}]} >Available {' '}</Text>
                     {formatQuantity(available)}
                 </Text>
 
-                <Text style={styles.value}>
-                    <Text style={styles.label} >Spend {' '}</Text>
+                <Text style={styles.text}>
+                    <Text style={[styles.text, {color:Colors.primaryColor}]} >Spend {' '}</Text>
                     {formatQuantity(spent)}
                 </Text>
             </View>
@@ -74,14 +81,6 @@ const styles = StyleSheet.create({
     centerGrapic:{
         alignItems:'center'
     },
-    btnPlus:{
-        backgroundColor: danger,
-        padding: 10,
-        borderRadius: 5,
-        marginBottom: 20,
-        alignItems:'center'
-
-    },
     btnPlusText:{
         color: 'white',
         fontSize: 18,
@@ -91,14 +90,12 @@ const styles = StyleSheet.create({
     containerText:{
         marginTop:50
     },
-    value:{
+    text:{
         fontSize: 24,
         textAlign: 'center',
-        marginLeft: 10
-    },
-    label:{
+        marginLeft: 10,
+        color: colors.textColor,
         fontWeight: '700',
-        color: textColor
     },
     
 })

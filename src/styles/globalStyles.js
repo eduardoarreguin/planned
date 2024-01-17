@@ -1,4 +1,4 @@
-import { danger, primaryColor } from "./colors";
+import Colors from "./colors";
 
 const globalStyles = {
     container:{
@@ -18,18 +18,27 @@ const globalStyles = {
         elevation: 4
     },
     title:{
-        color: primaryColor,
+        color: Colors.primaryColor,
         fontSize: 30,
         textAlign: 'center',
+        fontWeight: '600'
+
 
     },
     textAmount:{
         fontSize: 20,
-        fontWeight: '700'
+        fontWeight: '600'
     },
     textDate:{
-        fontWeight: '700',
-        color: danger
+        fontWeight: '600',
+        color: Colors.pinkLight
+    },
+    btn:{
+        padding: 10,
+        marginHorizontal: 10,
+        flex: 1,
+        alignItems:'center',
+        borderRadius: 2
     },
 }
 

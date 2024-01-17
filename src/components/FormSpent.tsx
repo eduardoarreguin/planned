@@ -6,12 +6,15 @@ import {
     TextInput,
     View,
     Pressable,
+    StyleProp,
+    TextStyle,
 } from 'react-native';
 
-import {danger, formColor, formTextColor, secondaryColor} from '../styles/colors';
+import Colors from '../styles/colors';
 import globalStyles from '../styles/globalStyles';
 import {FormSpentI} from '../interfaces/interfaces';
 import MyPicker from './MyPicker';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const FormSpend: React.FC<FormSpentI> = ({
     setModal,
@@ -44,10 +47,14 @@ const FormSpend: React.FC<FormSpentI> = ({
 
     return (
         <SafeAreaView style={styles.container}>
+            
             <View style={styles.containerButtons} >
 
                 <Pressable
-                    style={[styles.btn, styles.btnCancel]}
+                    style={[
+                        globalStyles.btn as StyleProp<TextStyle>,
+                        { backgroundColor: Colors.pinkLight}
+                    ]}
                     onPress={() => {
                         setModal(false);
                         setBill(undefined);
@@ -56,8 +63,11 @@ const FormSpend: React.FC<FormSpentI> = ({
                 </Pressable>
                 {
                     !!id&&(
-                       <Pressable
-                            style={[styles.btn, styles.btnDelete]}
+                    <Pressable
+                            style={[
+                                globalStyles.btn as StyleProp<TextStyle>,
+                                { backgroundColor: Colors.redDark,}
+                            ]}
                             onPress={()=>{
                                 deleteSpent(id)
                             }}
@@ -70,50 +80,55 @@ const FormSpend: React.FC<FormSpentI> = ({
                     
 
             </View>
+            <ScrollView>
+                <View style={styles.form}>
+                    <Text style={styles.title}>{bill?.name ? 'Edit' : 'New'} Spent</Text>
 
-            <View style={styles.form}>
-                <Text style={styles.title}>{bill?.name ? 'Edit' : 'New'} Spent</Text>
+                    <View style={styles.field}>
+                        <Text style={styles.label}>Spent name</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="spent name ej food"
+                            value={name}
+                            onChangeText={value => setName(value)}
+                        />
+                    </View>
 
-                <View style={styles.field}>
-                    <Text style={styles.label}>Spent name</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="spent name ej food"
-                        value={name}
-                        onChangeText={value => setName(value)}
-                    />
+                    <View style={styles.field}>
+                        <Text style={styles.label}>Amount of expense</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="amount of expense"
+                            keyboardType="numeric"
+                            returnKeyType="done"
+                            value={amount?.toString()}
+                            onChangeText={(text:string) => {
+                                const number = parseInt(text, 10);
+                                setAmount(!isNaN(number)? number : 0)
+                            }}
+                        />
+                    </View>
+
+                    <View style={styles.field}>
+                        <Text style={styles.label}>Category Spent</Text>
+                        <MyPicker selectedValue={category} onValueChange={setCategory}/>
+                            
+                    </View>
+
+                    <Pressable
+                        style={[
+                            globalStyles.btn as StyleProp<TextStyle>,
+                            { backgroundColor: Colors.primaryColor }
+                            // styles.submitBtn
+                        ]}
+                        onPress={() => handleSpent({name, amount, category, id, date})}>
+                        <Text style={styles.submitBtnText}>
+                            {' '}
+                            {bill?.name ? 'Save Changes ' : 'Add'} spent
+                    </Text>
+                    </Pressable>
                 </View>
-
-                <View style={styles.field}>
-                    <Text style={styles.label}>Amount of expense</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="amount of expense"
-                        keyboardType="numeric"
-                        returnKeyType="done"
-                        value={amount?.toString()}
-                        onChangeText={(text:string) => {
-                            const number = parseInt(text, 10);
-                            setAmount(!isNaN(number)? number : 0)
-                        }}
-                    />
-                </View>
-
-                <View style={styles.field}>
-                    <Text style={styles.label}>Category Spent</Text>
-                    <MyPicker selectedValue={category} onValueChange={setCategory}/>
-                        
-                </View>
-
-                <Pressable
-                    style={styles.submitBtn}
-                    onPress={() => handleSpent({name, amount, category, id, date})}>
-                    <Text style={styles.submitBtnText}>
-                        {' '}
-                        {bill?.name ? 'Save Changes ' : 'Add'} spent
-                  </Text>
-                </Pressable>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };
@@ -122,66 +137,54 @@ export default FormSpend;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: formColor,
+        backgroundColor: Colors.formColor,
         flex: 1,
     },
     containerButtons:{
         flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    btn:{
-        padding: 10,
+        justifyContent: 'space-between',
         marginTop: 30,
-        marginHorizontal: 10,
-        flex: 1
+        marginBottom: 5
     },
-    btnCancel: {
-        backgroundColor: danger,
-    },
-    btnDelete:{
-        backgroundColor: 'red',
-    },
+    
+    
     btnText: {
         textAlign: 'center',
         textTransform: 'uppercase',
         fontWeight: 'bold',
-        color: '#FFF',
+        color: Colors.secondaryColor,
     },
     form: {
         ...globalStyles.container,
-        marginTop: -10,
+        marginTop: -30,
+        marginBottom: 80
     },
     title: {
         textAlign: 'center',
         fontSize: 28,
         marginBottom: 30,
-        color: formTextColor,
+        color: Colors.textColor,
     },
     field: {
         marginVertical: 25,
     },
     label: {
-        color: formTextColor,
+        color: Colors.textColor,
         textTransform: 'uppercase',
         fontSize: 16,
         fontWeight: 'bold',
     },
     input: {
-        backgroundColor: secondaryColor,
+        backgroundColor: Colors.secondaryColor,
         padding: 10,
         borderRadius: 10,
         marginTop: 10,
     },
-    submitBtn: {
-        backgroundColor: '#3B82F6',
-        padding: 10,
-        marginTop: 0,
-        borderRadius: 2,
-    },
     submitBtnText: {
         textAlign: 'center',
-        color: '#FFF',
+        color: Colors.secondaryColor,
         fontWeight: 'bold',
         textTransform: 'uppercase',
     },
+    
 });

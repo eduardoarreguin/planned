@@ -4,9 +4,6 @@ import { StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native'
 import globalStyles from '../styles/globalStyles'
 import { FilterI } from '../interfaces/interfaces'
 import MyPicker from './MyPicker'
-import { primaryColor } from '../styles/colors'
-
-
 
 const Filter: React.FC<FilterI> = ({ filter, setFilter, bills, setFilteredBills }) => {
 

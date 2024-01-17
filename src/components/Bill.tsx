@@ -3,6 +3,7 @@ import React from 'react'
 import { CategoriesI, FormDataI } from '../interfaces/interfaces'
 import globalStyles from '../styles/globalStyles'
 import { formatDate, formatQuantity } from '../helpers'
+import Colors from '../styles/colors'
 
 const dictionaryIcons: CategoriesI = {
     save:          require('../img/icon_save.png'),
@@ -78,16 +79,18 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     category:{
-        color: '#94A3B8',
-        fontSize: 16,
+        color: Colors.textLightColor,
+        fontSize: 14,
         fontWeight: '700',
         textTransform: 'uppercase',
         marginBottom: 5
     },
     name:{
         fontSize: 22,
-        color: '#64748B',
-        marginBottom: 5
+        color: Colors.textColor,
+        marginBottom: 5,
+        fontWeight: '700',
+
     },
     amount:{
         fontSize: 20,
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
     },
     date:{
         fontWeight: '700',
-        color: '#DB2777'
+        color: Colors.pinkLight
     }
 
 })

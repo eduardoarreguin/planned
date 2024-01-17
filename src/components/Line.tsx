@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import Colors from '../styles/colors'
 
 const Line = () => {
   return (
@@ -11,7 +12,7 @@ export default Line
 
 const styles = StyleSheet.create({
     line:{
-        backgroundColor: '#64748B',
+        backgroundColor: Colors.textColor,
         height: 2,
         width: '100%',
         alignSelf: 'center',

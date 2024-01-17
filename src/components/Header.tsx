@@ -1,5 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import Colors from '../styles/colors'
 
 const Header = () => {
   return (
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
     text:{
         textAlign: 'center',
         fontSize: 30,
-        color: '#fff',
+        color: Colors.secondaryColor,
         textTransform: 'uppercase',
         fontWeight: 'bold',
         paddingTop: 20,

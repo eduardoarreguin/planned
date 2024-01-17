@@ -1,6 +1,7 @@
-import { Pressable, StyleProp, StyleSheet, Text, TextInput, TextStyle, View, ScrollView } from 'react-native'
+import { Pressable, StyleProp, StyleSheet, Text, TextInput, TextStyle, View } from 'react-native'
 import React, { useState } from 'react'
-import { danger, primaryColor, secondaryColor } from '../styles/colors'
+
+import Colors from '../styles/colors'
 import { BudgetI, NewBudgetI } from '../interfaces/interfaces'
 import globalStyles from '../styles/globalStyles'
 import Budget from './Budget'
@@ -49,25 +50,31 @@ const newBudget: React.FC<NewBudgetI> = ({
                     }}
                 />
                 <View style={styles.containerButtons} >
-                {budget.length >= 1&&
-                    <Pressable
-                        style={[styles.btn, styles.btnCancel]}
-                        onPress={() => { 
-                            setAddBudget(false)
-                        }}
-                    >
-                        <Text style={styles.btnText}>Cancel</Text>
-                    </Pressable>
-                }
-                
-                <Pressable 
-                    style={[styles.btn, styles.btnAdd]} 
-                    onPress={()=> 
-                        handleNewBudget({amount, id, date})
+                    {budget.length >= 1&&
+                        <Pressable
+                            style={[
+                                globalStyles.btn as StyleProp<TextStyle>, 
+                                styles.btnCancel
+                            ]}
+                            onPress={() => { 
+                                setAddBudget(false)
+                            }}
+                        >
+                            <Text style={styles.btnText}>Cancel</Text>
+                        </Pressable>
                     }
-                >
-                    <Text style={styles.btnText} >Add budget</Text>
-                </Pressable>
+                
+                    <Pressable 
+                        style={[
+                            globalStyles.btn as StyleProp<TextStyle>, 
+                            styles.btnAdd
+                        ]} 
+                        onPress={()=> 
+                            handleNewBudget({amount, id, date})
+                        }
+                    >
+                        <Text style={styles.btnText} >Add budget</Text>
+                    </Pressable>
                 </View>
 
             
@@ -79,12 +86,15 @@ const newBudget: React.FC<NewBudgetI> = ({
 
                     <Line />
                     <View style={styles.contentTotal} >
-                        <Text style={[styles.textTotal, {color: primaryColor}]}>Total</Text>
+                        <Text style={[styles.textTotal, {color: Colors.primaryColor}]}>Total</Text>
                         <Text style={styles.textTotal } >{formatQuantity(budget.reduce((total, budget ) => Number(budget.amount) + total, 0))}</Text>
 
                     </View>
                     <Pressable
-                        style={[styles.btn, styles.btnDelete]}
+                        style={[
+                            globalStyles.btn as StyleProp<TextStyle>, 
+                            styles.btnDelete
+                        ]}
                         onPress={() => { resetApp() }}
                     >
                         <Text style={styles.btnText}>Reset App</Text>
@@ -103,7 +113,7 @@ const styles = StyleSheet.create({
         ...globalStyles.container,
     },
     input:{
-        backgroundColor: secondaryColor,
+        backgroundColor: Colors.secondaryColor,
         padding: 10, 
         borderRadius: 10,
         textAlign: 'center',
@@ -111,23 +121,19 @@ const styles = StyleSheet.create({
     },
     containerButtons:{
         flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    btn:{
-        padding: 10,
+        justifyContent: 'space-between',
         marginTop: 30,
-        marginHorizontal: 10,
-        flex: 1
     },
+    
     btnAdd:{
-        backgroundColor: primaryColor,
+        backgroundColor: Colors.primaryColor,
         
     },
     btnCancel: {
-        backgroundColor: danger,
+        backgroundColor: Colors.pinkLight,
     },
     btnDelete:{
-        backgroundColor: 'red',
+        backgroundColor: Colors.pinkLight,
     },
     btnText: {
         textAlign: 'center',
@@ -143,7 +149,8 @@ const styles = StyleSheet.create({
     contentTotal:{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 5
+        padding: 5,
+        marginBottom: 30
     },
     textTotal:{
         fontSize: 22,
