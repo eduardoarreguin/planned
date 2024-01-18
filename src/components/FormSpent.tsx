@@ -12,11 +12,20 @@ import {
 
 import Colors from '../styles/colors';
 import globalStyles from '../styles/globalStyles';
-import {FormSpentI} from '../interfaces/interfaces';
+import {BillI} from '../interfaces/interfaces';
 import MyPicker from './MyPicker';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const FormSpend: React.FC<FormSpentI> = ({
+export interface FormSpentProps{ 
+    setModal:      React.Dispatch<React.SetStateAction<boolean>>;
+    handleSpent:   (newBudget: BillI) => void;
+    bill:          BillI | undefined;
+    setBill:       React.Dispatch<React.SetStateAction<BillI|undefined>> ;
+    deleteSpent:   (id: string) => void;
+    setAmountItem: React.Dispatch<React.SetStateAction<number>>
+}
+
+const FormSpend: React.FC<FormSpentProps> = ({
     setModal,
     handleSpent,
     bill,
@@ -38,7 +47,7 @@ const FormSpend: React.FC<FormSpentI> = ({
     useEffect(() => {
         if (bill?.name) {
             setName(bill.name);
-            setAmount(bill.amount);
+            setAmount(bill.amount!);
             setCategory(bill.category);
             setId(bill.id!);
             setDate(bill.date!);
@@ -53,7 +62,7 @@ const FormSpend: React.FC<FormSpentI> = ({
                 <Pressable
                     style={[
                         globalStyles.btn as StyleProp<TextStyle>,
-                        { backgroundColor: Colors.pinkLight}
+                        { backgroundColor: Colors.pinkLight,}
                     ]}
                     onPress={() => {
                         setModal(false);

@@ -1,17 +1,25 @@
 import { StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native'
 import React from 'react'
-import { ListBillsI, FormDataI } from '../interfaces/interfaces';
+import { BillI } from '../interfaces/interfaces';
 import Bill from './Bill'
 import globalStyles from '../styles/globalStyles'
 
-const ListBills: React.FC<ListBillsI>  = ({
+export interface ListBillsProps{
+    bills:         BillI[]
+    setModal:      React.Dispatch<React.SetStateAction<boolean>>;
+    setBill:       React.Dispatch<React.SetStateAction<BillI|undefined>> ;
+    filter:        string;
+    filteredBills: BillI[];
+}
+
+const ListBills: React.FC<ListBillsProps>  = ({
     bills, 
     setModal, 
     setBill, 
     filter,
     filteredBills
 }) => {
-    const handleBill = (bill:FormDataI) =>{
+    const handleBill = (bill:BillI) =>{
         return (
             <Bill 
                 id={bill.id}

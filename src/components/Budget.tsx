@@ -9,7 +9,7 @@ const Budget: React.FC<BudgetI> = ({id, date, amount}) => {
     return (
     
         <View style={styles.content}>
-            <Text style={globalStyles.textDate as StyleProp<TextStyle>} >{formatDate(date)}</Text>
+            <Text style={globalStyles.textDate as StyleProp<TextStyle>} >{formatDate(Number(date))}</Text>
             <Text style={globalStyles.textAmount as StyleProp<TextStyle>} > {formatQuantity(amount)}</Text>
 
         </View>

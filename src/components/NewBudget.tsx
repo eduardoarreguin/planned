@@ -2,13 +2,20 @@ import { Pressable, StyleProp, StyleSheet, Text, TextInput, TextStyle, View } fr
 import React, { useState } from 'react'
 
 import Colors from '../styles/colors'
-import { BudgetI, NewBudgetI } from '../interfaces/interfaces'
+import { BudgetI,  } from '../interfaces/interfaces'
 import globalStyles from '../styles/globalStyles'
 import Budget from './Budget'
 import { formatQuantity } from '../helpers'
 import Line from './Line'
 
-const newBudget: React.FC<NewBudgetI> = ({
+interface NewBudgetProps{
+    handleNewBudget: (budget:BudgetI) => void;
+    budget:          BudgetI[]
+    setAddBudget:    React.Dispatch<React.SetStateAction<boolean>>;
+    resetApp:        () => void;
+}
+
+const newBudget: React.FC<NewBudgetProps> = ({
     handleNewBudget, 
     budget, 
     setAddBudget,
@@ -19,7 +26,7 @@ const newBudget: React.FC<NewBudgetI> = ({
     const [id, setId] = useState<string>('');
     const [date, setDate] = useState<Date>();
 
-    const handleBudget = (budget:BudgetI) =>{
+    const handleBudget = (budget:BudgetI): React.JSX.Element => {
         return (
             <Budget 
                 id={budget.id}

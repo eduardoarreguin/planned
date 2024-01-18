@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Pressable, StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native';
 
-import Line from '../components/Line';
 import globalStyles from '../styles/globalStyles';
-import { ControlBudgetI } from '../interfaces/interfaces';
+import {  } from '../interfaces/interfaces';
 import { formatQuantity } from '../helpers';
 import Colors from '../styles/colors';
 
 import CircularProgress from 'react-native-circular-progress-indicator';
 import colors from '../styles/colors';
 
-const controlBudget:React.FC<ControlBudgetI> = ({
+interface ControlBudgetProps{
+    budget:       number;
+    available:    number;
+    spent:        number;
+    percentaje:   number;
+    setAddBudget: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const controlBudget:React.FC<ControlBudgetProps> = ({
     budget, 
     available, 
     spent, 

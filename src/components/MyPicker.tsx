@@ -2,9 +2,14 @@ import React from 'react'
 import { View } from 'react-native'
 
 import { Picker } from '@react-native-picker/picker'
-import { PickerI } from '../interfaces/interfaces'
 
-const MyPicker: React.FC<PickerI> = ({selectedValue, onValueChange}) => {
+interface PickerProps{
+  selectedValue: string
+  onValueChange: React.Dispatch<React.SetStateAction<string>>
+}
+
+
+const MyPicker: React.FC<PickerProps> = ({selectedValue, onValueChange}) => {
   return (
     <View style={{}} >
         <Picker selectedValue={selectedValue} onValueChange={onValueChange}>

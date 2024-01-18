@@ -2,10 +2,17 @@ import React, { useEffect } from 'react'
 import { StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native'
 
 import globalStyles from '../styles/globalStyles'
-import { FilterI } from '../interfaces/interfaces'
+import { BillI } from '../interfaces/interfaces'
 import MyPicker from './MyPicker'
 
-const Filter: React.FC<FilterI> = ({ filter, setFilter, bills, setFilteredBills }) => {
+interface FilterProps {
+    filter:           string;
+    setFilter:        React.Dispatch<React.SetStateAction<string>>;
+    bills:            BillI[];
+    setFilteredBills: React.Dispatch<React.SetStateAction<BillI[]>>;
+  }
+
+const Filter: React.FC<FilterProps> = ({ filter, setFilter, bills, setFilteredBills }) => {
 
     useEffect(() => {
         if(filter === ''){

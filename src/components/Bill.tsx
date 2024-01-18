@@ -1,11 +1,23 @@
 import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, StyleProp, TextStyle } from 'react-native'
 import React from 'react'
-import { CategoriesI, FormDataI } from '../interfaces/interfaces'
+import { BillI  } from '../interfaces/interfaces'
 import globalStyles from '../styles/globalStyles'
 import { formatDate, formatQuantity } from '../helpers'
 import Colors from '../styles/colors'
 
-const dictionaryIcons: CategoriesI = {
+interface Categories {
+    save:          NodeRequire;
+    food:          NodeRequire;
+    home:          NodeRequire;
+    miscellaneous: NodeRequire;
+    leisure:       NodeRequire;
+    health:        NodeRequire;
+    subscriptions: NodeRequire;
+    [key: string]: any; // Firma de índice
+  }
+
+
+const dictionaryIcons: Categories = {
     save:          require('../img/icon_save.png'),
     food:          require('../img/icon_food.png'),
     home:          require('../img/icon_home.png'),
@@ -17,7 +29,7 @@ const dictionaryIcons: CategoriesI = {
 
 }
 
-const Bill: React.FC<FormDataI>  = ({id, name, amount, category, date, setModal, setBill}) => {
+const Bill: React.FC<BillI>  = ({id, name, amount, category, date, setModal, setBill}) => {
 
     const handleActions = () =>{
         setModal!(true)
@@ -41,11 +53,11 @@ const Bill: React.FC<FormDataI>  = ({id, name, amount, category, date, setModal,
                         <View style={styles.containerText}>
                             <Text style={styles.category}>{category}</Text>
                             <Text style={styles.name}>{name}</Text>
-                            <Text style={globalStyles.textDate as StyleProp<TextStyle>}>{formatDate(date)}</Text>
+                            <Text style={globalStyles.textDate as StyleProp<TextStyle>}>{formatDate(Number(date))}</Text>
                         </View>
                     </View>
 
-                    <Text style={globalStyles.textAmount as StyleProp<TextStyle>}>{formatQuantity(amount)}</Text>
+                    <Text style={globalStyles.textAmount as StyleProp<TextStyle>}>{formatQuantity(amount!)}</Text>
                 </View>
 
             </View>

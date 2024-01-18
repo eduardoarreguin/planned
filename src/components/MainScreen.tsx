@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert, Pressable, Image, Modal, ScrollView } from 'react-native';
+import { View, StyleSheet, Alert, Pressable, Modal, ScrollView } from 'react-native';
 
 import Header        from './Header';
 import NewBudget     from './NewBudget';
@@ -9,20 +9,21 @@ import ListBills     from './ListBills';
 import Filter        from './Filter';  
 
 import Colors from '../styles/colors';
-import { BudgetI, FormDataI } from '../interfaces/interfaces';
+import { BudgetI, BillI } from '../interfaces/interfaces';
 import { generateId } from '../helpers';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../styles/colors';
+import { useAppContext } from '../context/AppContext';
 
 const App: React.FC = () => {   
     const [ addBudget, setAddBudget ]         = useState<boolean>(true)
     const [ budget, setBudget ]               = useState<BudgetI[]>([])
-    const [ bills, setBills ]                 = useState<FormDataI[]>([])
+    const [ bills, setBills ]                 = useState<BillI[]>([])
     const [ modal, setModal ]                 = useState<boolean>(false)
-    const [ bill, setBill ]                   = useState<FormDataI>()
+    const [ bill, setBill ]                   = useState<BillI>()
     const [ filter, setFilter ]               = useState<string>('')
-    const [ filteredBills, setFilteredBills ] = useState<FormDataI[]>([])
+    const [ filteredBills, setFilteredBills ] = useState<BillI[]>([])
     
     const [available, setAvailable]   = useState<number>(0)
     const [spent, setSpent]           = useState<number>(0)
@@ -47,7 +48,7 @@ const App: React.FC = () => {
         const getBillsStorage = async() => {
             try {
                 const billsStorage = await AsyncStorage.getItem('bills');
-                setBills( billsStorage? JSON.parse(billsStorage): ([] as FormDataI[]) )
+                setBills( billsStorage? JSON.parse(billsStorage): ([] as BillI[]) )
                 
             } catch (error) {
                 console.log(error)
@@ -115,10 +116,10 @@ const App: React.FC = () => {
     } 
 
     const handleSpent = ( 
-        { name, amount, category, id, date }: FormDataI
+        { name, amount, category, id, date }: BillI
     ) => {
 
-        if ((name.trim() === '' || category.trim() === '') || (amount === null || amount <= 0)) {
+        if ((name.trim() === '' || category.trim() === '') || (amount === null || amount! <= 0)) {
             Alert.alert('Error', 'All fields are required', [
                 { text: 'OK' }
             ])
